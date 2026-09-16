@@ -20,7 +20,7 @@ const Board = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <div className="pt-24 pb-20 px-6 min-h-screen relative overflow-hidden">
+    <div className="pt-40 pb-20 px-6 min-h-screen relative overflow-hidden">
       <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-primary/5 blur-[150px] rounded-full pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">

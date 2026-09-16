@@ -82,13 +82,13 @@ const Events = () => {
                   )}
                 </div>
                 
-                <div className="p-8 flex flex-col flex-grow relative bg-[#0A0A0F]">
-                  <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-primary transition-colors">{event.title}</h3>
-                  <p className="text-base text-gray-400 leading-relaxed mb-8 flex-grow">{event.description}</p>
+                <div className="p-6 md:p-8 flex flex-col flex-grow relative bg-[#0A0A0F]">
+                  <div className="absolute top-0 left-6 right-6 md:left-8 md:right-8 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-3 group-hover:text-primary transition-colors">{event.title}</h3>
+                  <p className="text-sm md:text-base text-gray-400 leading-relaxed mb-6 flex-grow">{event.description}</p>
                   
                   {event.link && (
-                    <a href={event.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-white transition-colors mt-auto w-fit">
+                    <a href={event.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-primary hover:text-white transition-colors mt-auto w-fit">
                       Visit Site <ExternalLink className="w-4 h-4" />
                     </a>
                   )}
@@ -138,12 +138,12 @@ const Events = () => {
                     <div className="flex flex-col gap-8">
                       {/* Content Block */}
                       <div className="flex-1 w-full">
-                        <div className="tech-card p-8 md:p-10 shadow-2xl transition-all duration-500 hover:shadow-primary/5 hover:-translate-y-1">
-                          <h4 className="text-3xl font-bold text-white mb-2 group-hover:text-primary transition-colors">{event.title}</h4>
-                          <div className="text-sm font-mono text-primary uppercase tracking-widest mb-6">
+                        <div className="tech-card p-6 md:p-8 shadow-2xl transition-all duration-500 hover:shadow-primary/5 hover:-translate-y-1">
+                          <h4 className="text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2 group-hover:text-primary transition-colors">{event.title}</h4>
+                          <div className="text-xs md:text-sm font-mono text-primary uppercase tracking-widest mb-4 md:mb-6">
                             {day} {month} {year}
                           </div>
-                          <p className="text-lg text-gray-400 leading-relaxed mb-10">
+                          <p className="text-base md:text-lg text-gray-400 leading-relaxed mb-8">
                             {event.description}
                           </p>
 
