@@ -94,14 +94,14 @@ const Home = () => {
           ))}
         </motion.div>
 
-        {/* Mobile Background Fallback (Blurred & Low Opacity Floating Logos) */}
-        <div className="absolute inset-0 z-0 pointer-events-none md:hidden overflow-hidden opacity-10 blur-sm mix-blend-screen">
+        {/* Mobile Background Fallback (Floating Logos) */}
+        <div className="absolute inset-0 z-0 pointer-events-none md:hidden overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(14,165,233,0.05)_0%,transparent_100%)]">
           {organicLogos.map((logo, i) => (
             <img
               key={`mob-${i}`}
               src={logo.src}
               alt="Distro"
-              className="absolute grayscale opacity-30"
+              className="absolute opacity-40 mix-blend-screen"
               style={{
                 left: logo.x,
                 top: logo.y,
