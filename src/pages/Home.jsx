@@ -14,13 +14,13 @@ const galleryItems = [
 
 // Authentic Linux Distro Image URLs
 const organicLogos = [
-  { src: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg", x: "10%", y: "25%", w: 64, mobX: "2%", mobY: "15%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg", x: "10%", y: "25%", w: 64, mobX: "2%", mobY: "12%" },
   { src: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Debian-OpenLogo.svg", x: "85%", y: "20%", w: 56, mobX: "80%", mobY: "18%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Archlinux-icon-crystal-64.svg", x: "85%", y: "70%", w: 60, mobX: "80%", mobY: "50%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png", x: "10%", y: "75%", w: 72, mobX: "2%", mobY: "75%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg", x: "70%", y: "85%", w: 56, mobX: "80%", mobY: "78%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg", x: "20%", y: "15%", w: 64, mobX: "2%", mobY: "45%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/4/42/Opensource.svg", x: "15%", y: "50%", w: 60, mobX: "40%", mobY: "88%" }
+  { src: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Archlinux-icon-crystal-64.svg", x: "85%", y: "70%", w: 60, mobX: "85%", mobY: "82%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png", x: "10%", y: "75%", w: 72, mobX: "5%", mobY: "85%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg", x: "70%", y: "85%", w: 56, mobX: "60%", mobY: "90%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg", x: "20%", y: "15%", w: 64, mobX: "2%", mobY: "25%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/4/42/Opensource.svg", x: "15%", y: "50%", w: 60, mobX: "20%", mobY: "88%" }
 ];
 
 // Title letter animation variants
@@ -39,14 +39,12 @@ const titleVariants = {
     }
   }),
   wave: (i) => ({
-    y: [0, -35, 0],
+    y: [0, -40, 0],
     scale: [1, 1.3, 1],
     transition: {
       delay: i * 0.03,
-      duration: 0.5,
-      type: "spring",
-      stiffness: 300,
-      damping: 10
+      duration: 0.6,
+      ease: "easeInOut"
     }
   })
 };
@@ -95,6 +93,11 @@ const Home = () => {
       {/* ═══ HERO SECTION ═══ */}
       <section className="relative min-h-[100dvh] flex items-center justify-center px-4 md:px-6 pt-20 overflow-hidden bg-[#0A0A0F]">
         
+        {/* Central Glow */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(14,165,233,0.20)_0%,transparent_50%)]" />
+        </div>
+        
         {/* Ambient Base Layer (PC) - Always faintly visible so it's not completely empty */}
         <div className="absolute inset-0 z-0 pointer-events-none hidden md:block opacity-[0.03]">
           {organicLogos.map((logo, i) => (
@@ -124,14 +127,14 @@ const Home = () => {
           ))}
         </motion.div>
 
-        {/* Mobile Background Fallback (Restricted Edges) */}
+        {/* Mobile Background Fallback (Logos restricted completely outside text/glow area) */}
         <div className="absolute inset-0 z-0 pointer-events-none md:hidden overflow-hidden">
           {organicLogos.map((logo, i) => (
             <motion.img
               key={`mob-${i}`}
               src={logo.src}
               alt="Distro"
-              className="absolute opacity-20 mix-blend-screen"
+              className="absolute opacity-[0.12] grayscale"
               style={{
                 left: logo.mobX,
                 top: logo.mobY,
@@ -150,11 +153,11 @@ const Home = () => {
           ))}
         </div>
 
-        <div className="max-w-5xl mx-auto text-center relative z-10 pointer-events-none">
+        <div className="max-w-5xl mx-auto text-center relative z-10">
           {/* Animated Title in two distinct lines */}
           <h1 
             onClick={handleTitleClick}
-            className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-6 leading-tight drop-shadow-2xl flex flex-col items-center justify-center gap-y-2 cursor-pointer select-none perspective-[1000px] pointer-events-auto"
+            className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-6 leading-tight drop-shadow-2xl flex flex-col items-center justify-center gap-y-2 cursor-pointer select-none perspective-[1000px]"
           >
             <span className="inline-flex text-white">
               {"Walchand Linux".split("").map((char, i) => (
@@ -201,7 +204,7 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 pointer-events-auto"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <Link to="/events" className="tech-button group">
               Explore Events

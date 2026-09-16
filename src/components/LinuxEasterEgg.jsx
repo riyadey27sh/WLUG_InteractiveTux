@@ -32,7 +32,7 @@ const TRIVIA_QUESTIONS = [
 
 const LinuxEasterEgg = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   // Game States
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -48,7 +48,7 @@ const LinuxEasterEgg = ({ children }) => {
     { type: 'system', content: 'WLUG OS v1.0.0 (tty1)' },
     { type: 'system', content: 'Type "help" to see available commands.' }
   ]);
-  
+
   const inputRef = useRef(null);
   const bottomRef = useRef(null);
 
@@ -89,7 +89,7 @@ const LinuxEasterEgg = ({ children }) => {
     if (index === TRIVIA_QUESTIONS[currentQuestion].answer) {
       setScore(s => s + 1);
     }
-    
+
     if (currentQuestion + 1 < TRIVIA_QUESTIONS.length) {
       setCurrentQuestion(c => c + 1);
     } else {
@@ -114,7 +114,7 @@ const LinuxEasterEgg = ({ children }) => {
       newHistory.push(
         { type: 'system', content: 'Available commands:' },
         { type: 'system', content: '  about   - Learn about WLUG' },
-        { type: 'system', content: '  events  - List upcoming events' },
+        { type: 'system', content: '  events  - List events' },
         { type: 'system', content: '  play    - Play Linux Trivia' },
         { type: 'system', content: '  matrix  - Enter the matrix' },
         { type: 'system', content: '  sudo    - Execute as root' },
@@ -129,7 +129,7 @@ const LinuxEasterEgg = ({ children }) => {
       setHistory(newHistory);
     } else if (cmd === 'events') {
       newHistory.push(
-        { type: 'system', content: 'Upcoming WLUG Events:' },
+        { type: 'system', content: 'WLUG Events:' },
         { type: 'system', content: ' - Linux Diary: A deep dive into the Linux ecosystem.' },
         { type: 'system', content: ' - Metamorphosis: Our annual flagship tech symposium.' },
         { type: 'system', content: 'Check out the /events page for more details!' }
@@ -193,7 +193,7 @@ const LinuxEasterEgg = ({ children }) => {
                   <TerminalIcon className="w-4 h-4 text-primary" />
                   <span className="text-xs font-mono text-primary tracking-widest">GUEST_TERMINAL // WLUG</span>
                 </div>
-                <button 
+                <button
                   onClick={() => setIsOpen(false)}
                   className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"
                 />
@@ -205,8 +205,8 @@ const LinuxEasterEgg = ({ children }) => {
                   <div className="w-full h-full flex flex-col items-center justify-center font-mono text-green-500 overflow-hidden relative">
                     {/* Fake Matrix Rain */}
                     {Array.from({ length: 20 }).map((_, i) => (
-                      <div 
-                        key={i} 
+                      <div
+                        key={i}
                         className="absolute text-lg whitespace-pre font-bold"
                         style={{
                           left: `${Math.random() * 100}%`,
@@ -234,9 +234,9 @@ const LinuxEasterEgg = ({ children }) => {
                       <span>TRIVIA SCORE: {score} / {TRIVIA_QUESTIONS.length}</span>
                       <button onClick={closeGame} className="hover:text-white transition-colors">[EXIT]</button>
                     </div>
-                    
+
                     {!gameOver ? (
-                      <motion.div 
+                      <motion.div
                         key={currentQuestion}
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -260,14 +260,14 @@ const LinuxEasterEgg = ({ children }) => {
                         </div>
                       </motion.div>
                     ) : (
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         className="flex-1 flex flex-col items-center justify-center text-center"
                       >
                         <span className="text-primary font-bold text-3xl mb-4">TEST COMPLETE</span>
                         <span className="text-white text-xl mb-8">FINAL SCORE: {score} / {TRIVIA_QUESTIONS.length}</span>
-                        <button 
+                        <button
                           onClick={startGame}
                           className="px-6 py-3 bg-primary/20 text-primary border border-primary hover:bg-primary hover:text-black transition-colors font-bold tracking-widest"
                         >
@@ -277,7 +277,7 @@ const LinuxEasterEgg = ({ children }) => {
                     )}
                   </div>
                 ) : (
-                  <div 
+                  <div
                     className="w-full h-full overflow-y-auto font-mono text-sm leading-relaxed"
                     onClick={() => inputRef.current?.focus()}
                   >
@@ -286,7 +286,7 @@ const LinuxEasterEgg = ({ children }) => {
                         {line.content}
                       </div>
                     ))}
-                    
+
                     <form onSubmit={handleSubmit} className="flex items-center mt-2">
                       <span className="text-white mr-2">guest@wlug:~$</span>
                       <input
