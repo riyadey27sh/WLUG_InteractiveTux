@@ -5,12 +5,14 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Events from './pages/Events';
 import Board from './pages/Board';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   const location = useLocation();
 
   return (
     <div className="min-h-screen bg-background text-white flex flex-col font-sans">
+      <ScrollToTop />
       <Navbar />
       
       <main className="flex-grow">

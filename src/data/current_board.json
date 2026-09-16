@@ -8,6 +8,14 @@
       "photo": "",
       "github": "",
       "linkedin": "rkjoshi"
+    },
+    {
+      "name": "Dr. S. B. Patil",
+      "position": "Faculty Co-Mentor",
+      "quote": "Empowering students through tech.",
+      "photo": "",
+      "github": "",
+      "linkedin": ""
     }
   ],
   "main": [
@@ -26,6 +34,22 @@
       "photo": "",
       "github": "snehak",
       "linkedin": "sneha-kulkarni"
+    },
+    {
+      "name": "Arjun Desai",
+      "position": "Secretary",
+      "quote": "Documentation is a love letter to your future self.",
+      "photo": "",
+      "github": "arjund",
+      "linkedin": "arjun-desai"
+    },
+    {
+      "name": "Priya Sharma",
+      "position": "Treasurer",
+      "quote": "rm -rf /problems",
+      "photo": "",
+      "github": "priyas",
+      "linkedin": "priya-sharma"
     }
   ],
   "assistant": [
@@ -36,6 +60,30 @@
       "photo": "",
       "github": "rahulv",
       "linkedin": "rahul-verma"
+    },
+    {
+      "name": "Vikram Singh",
+      "position": "Tech Lead",
+      "quote": "Containers are the future.",
+      "photo": "",
+      "github": "vikrams",
+      "linkedin": "vikram-singh"
+    },
+    {
+      "name": "Neha Gupta",
+      "position": "Design Lead",
+      "quote": "Pixels perfect.",
+      "photo": "",
+      "github": "nehag",
+      "linkedin": "neha-gupta"
+    },
+    {
+      "name": "Rohan Mehta",
+      "position": "PR Head",
+      "quote": "Connecting dots.",
+      "photo": "",
+      "github": "rohanm",
+      "linkedin": "rohan-mehta"
     }
   ],
   "member": [
@@ -46,6 +94,30 @@
       "photo": "",
       "github": "ananyas",
       "linkedin": "ananya-singh"
+    },
+    {
+      "name": "Karan Jain",
+      "position": "Member",
+      "quote": "Learning to fly.",
+      "photo": "",
+      "github": "karanj",
+      "linkedin": "karan-jain"
+    },
+    {
+      "name": "Simran Kaur",
+      "position": "Member",
+      "quote": "Debugging life.",
+      "photo": "",
+      "github": "simrank",
+      "linkedin": "simran-kaur"
+    },
+    {
+      "name": "Aditya Patil",
+      "position": "Member",
+      "quote": "Code, sleep, repeat.",
+      "photo": "",
+      "github": "adityap",
+      "linkedin": "aditya-patil"
     }
   ]
 }

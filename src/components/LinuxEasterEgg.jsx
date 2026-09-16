@@ -1,41 +1,63 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal as TerminalIcon } from 'lucide-react';
 
-const GRID_SIZE = 20;
-const INITIAL_SNAKE = [{ x: 10, y: 10 }];
-const INITIAL_DIRECTION = { x: 1, y: 0 };
-const GAME_SPEED = 100;
+const TRIVIA_QUESTIONS = [
+  {
+    q: "Who is the creator of the Linux kernel?",
+    options: ["Steve Jobs", "Richard Stallman", "Linus Torvalds", "Bill Gates"],
+    answer: 2
+  },
+  {
+    q: "Which command is used to list directory contents?",
+    options: ["ls", "list", "dir", "show"],
+    answer: 0
+  },
+  {
+    q: "What does 'sudo' stand for?",
+    options: ["Super User Do", "System Utility Do", "Superuser Data Object", "Start Utility Do"],
+    answer: 0
+  },
+  {
+    q: "Which file contains user account information in Linux?",
+    options: ["/etc/pass", "/etc/users", "/etc/shadow", "/etc/passwd"],
+    answer: 3
+  },
+  {
+    q: "What is the standard text editor in most Linux distros?",
+    options: ["nano", "vi/vim", "gedit", "emacs"],
+    answer: 1
+  }
+];
 
 const LinuxEasterEgg = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   
   // Game States
   const [isPlaying, setIsPlaying] = useState(false);
-  const [snake, setSnake] = useState(INITIAL_SNAKE);
-  const [direction, setDirection] = useState(INITIAL_DIRECTION);
-  const [food, setFood] = useState({ x: 15, y: 10 });
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+
+  // Matrix State
+  const [isMatrix, setIsMatrix] = useState(false);
 
   // Terminal States
   const [input, setInput] = useState('');
   const [history, setHistory] = useState([
     { type: 'system', content: 'WLUG OS v1.0.0 (tty1)' },
-    { type: 'system', content: 'Type "play" to launch the Easter Egg.' },
-    { type: 'system', content: 'Type "help" for other commands.' }
+    { type: 'system', content: 'Type "help" to see available commands.' }
   ]);
   
   const inputRef = useRef(null);
   const bottomRef = useRef(null);
-  const gameAreaRef = useRef(null);
 
   // Focus terminal input
   useEffect(() => {
-    if (isOpen && !isPlaying && inputRef.current) {
+    if (isOpen && !isPlaying && !isMatrix && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isOpen, isPlaying, history]);
+  }, [isOpen, isPlaying, isMatrix, history]);
 
   // Scroll to bottom
   useEffect(() => {
@@ -44,126 +66,77 @@ const LinuxEasterEgg = ({ children }) => {
     }
   }, [history]);
 
-  const generateFood = useCallback(() => {
-    let newFood;
-    while (true) {
-      newFood = {
-        x: Math.floor(Math.random() * GRID_SIZE),
-        y: Math.floor(Math.random() * GRID_SIZE)
-      };
-      // eslint-disable-next-line no-loop-func
-      const isOnSnake = snake.some(segment => segment.x === newFood.x && segment.y === newFood.y);
-      if (!isOnSnake) break;
-    }
-    setFood(newFood);
-  }, [snake]);
-
   const startGame = () => {
     setIsPlaying(true);
     setGameOver(false);
-    setSnake(INITIAL_SNAKE);
-    setDirection(INITIAL_DIRECTION);
+    setCurrentQuestion(0);
     setScore(0);
-    generateFood();
-    if (gameAreaRef.current) {
-      gameAreaRef.current.focus();
-    }
   };
 
-  const handleKeyDown = useCallback((e) => {
-    if (!isPlaying || gameOver) return;
-    
-    switch (e.key) {
-      case 'ArrowUp':
-      case 'w':
-      case 'W':
-        if (direction.y !== 1) setDirection({ x: 0, y: -1 });
-        break;
-      case 'ArrowDown':
-      case 's':
-      case 'S':
-        if (direction.y !== -1) setDirection({ x: 0, y: 1 });
-        break;
-      case 'ArrowLeft':
-      case 'a':
-      case 'A':
-        if (direction.x !== 1) setDirection({ x: -1, y: 0 });
-        break;
-      case 'ArrowRight':
-      case 'd':
-      case 'D':
-        if (direction.x !== -1) setDirection({ x: 1, y: 0 });
-        break;
-      default:
-        break;
+  const handleAnswer = (index) => {
+    if (index === TRIVIA_QUESTIONS[currentQuestion].answer) {
+      setScore(s => s + 1);
     }
-  }, [direction, isPlaying, gameOver]);
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
-
-  useEffect(() => {
-    if (!isPlaying || gameOver) return;
-
-    const moveSnake = setInterval(() => {
-      setSnake(prevSnake => {
-        const head = { ...prevSnake[0] };
-        head.x += direction.x;
-        head.y += direction.y;
-
-        // Wall collision
-        if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
-          setGameOver(true);
-          return prevSnake;
-        }
-
-        // Self collision
-        if (prevSnake.some(segment => segment.x === head.x && segment.y === head.y)) {
-          setGameOver(true);
-          return prevSnake;
-        }
-
-        const newSnake = [head, ...prevSnake];
-
-        // Food collision
-        if (head.x === food.x && head.y === food.y) {
-          setScore(s => s + 10);
-          generateFood();
-        } else {
-          newSnake.pop();
-        }
-
-        return newSnake;
-      });
-    }, GAME_SPEED);
-
-    return () => clearInterval(moveSnake);
-  }, [isPlaying, gameOver, direction, food, generateFood]);
+    
+    if (currentQuestion + 1 < TRIVIA_QUESTIONS.length) {
+      setCurrentQuestion(c => c + 1);
+    } else {
+      setGameOver(true);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
     const cmd = input.trim().toLowerCase();
-    const newHistory = [...history, { type: 'user', content: `$ ${input}` }];
+    const newHistory = [...history, { type: 'user', content: `guest@wlug:~$ ${input}` }];
 
     if (cmd === 'clear') {
       setHistory([]);
     } else if (cmd === 'play') {
-      newHistory.push({ type: 'system', content: 'Initializing SNAKE.EXE...' });
+      newHistory.push({ type: 'system', content: 'Initializing TRIVIA.EXE...' });
       setHistory(newHistory);
       setTimeout(() => startGame(), 600);
     } else if (cmd === 'help') {
-      newHistory.push({ type: 'system', content: 'Commands: play, whoami, date, clear' });
+      newHistory.push(
+        { type: 'system', content: 'Available commands:' },
+        { type: 'system', content: '  about   - Learn about WLUG' },
+        { type: 'system', content: '  events  - List upcoming events' },
+        { type: 'system', content: '  play    - Play Linux Trivia' },
+        { type: 'system', content: '  matrix  - Enter the matrix' },
+        { type: 'system', content: '  sudo    - Execute as root' },
+        { type: 'system', content: '  clear   - Clear terminal' }
+      );
+      setHistory(newHistory);
+    } else if (cmd === 'about') {
+      newHistory.push(
+        { type: 'system', content: 'Walchand Linux Users Group (WLUG) is a community of tech enthusiasts.' },
+        { type: 'system', content: 'Founded in 2003, we promote open-source software, host hackathons, and build cool projects.' }
+      );
+      setHistory(newHistory);
+    } else if (cmd === 'events') {
+      newHistory.push(
+        { type: 'system', content: 'Upcoming WLUG Events:' },
+        { type: 'system', content: ' - Linux Diary: A deep dive into the Linux ecosystem.' },
+        { type: 'system', content: ' - Metamorphosis: Our annual flagship tech symposium.' },
+        { type: 'system', content: 'Check out the /events page for more details!' }
+      );
       setHistory(newHistory);
     } else if (cmd === 'whoami') {
-      newHistory.push({ type: 'system', content: 'guest_user@wlug' });
+      newHistory.push({ type: 'system', content: 'guest_user' });
       setHistory(newHistory);
-    } else if (cmd === 'sudo') {
-      newHistory.push({ type: 'system', content: 'Nice try.' });
+    } else if (cmd === 'sudo' || cmd.startsWith('sudo ')) {
+      newHistory.push({ type: 'system', content: 'guest_user is not in the sudoers file. This incident will be reported.' });
       setHistory(newHistory);
+    } else if (cmd === 'matrix') {
+      newHistory.push({ type: 'system', content: 'Follow the white rabbit...' });
+      setHistory(newHistory);
+      setTimeout(() => setIsMatrix(true), 1000);
+      setTimeout(() => {
+        setIsMatrix(false);
+        setHistory(h => [...h, { type: 'system', content: 'Connection terminated.' }]);
+      }, 5000);
     } else {
       newHistory.push({ type: 'system', content: `bash: ${cmd}: command not found` });
       setHistory(newHistory);
@@ -174,12 +147,12 @@ const LinuxEasterEgg = ({ children }) => {
   const closeGame = () => {
     setIsPlaying(false);
     setGameOver(false);
-    setHistory([...history, { type: 'system', content: `Game exited. Score: ${score}` }]);
+    setHistory([...history, { type: 'system', content: `Trivia exited. Score: ${score}/${TRIVIA_QUESTIONS.length}` }]);
   };
 
   return (
     <>
-      <div onClick={() => setIsOpen(true)} className="cursor-pointer">
+      <div onClick={() => setIsOpen(true)} className="inline-block">
         {children}
       </div>
 
@@ -216,72 +189,94 @@ const LinuxEasterEgg = ({ children }) => {
 
               {/* Body */}
               <div className="p-6 h-[450px] relative">
-                {isPlaying ? (
-                  <div className="w-full h-full flex flex-col items-center justify-center font-mono" tabIndex={0} ref={gameAreaRef}>
-                    <div className="flex justify-between w-full max-w-[400px] mb-4 text-primary text-sm tracking-widest">
-                      <span>SCORE: {score.toString().padStart(4, '0')}</span>
+                {isMatrix ? (
+                  <div className="w-full h-full flex flex-col items-center justify-center font-mono text-green-500 overflow-hidden relative">
+                    {/* Fake Matrix Rain */}
+                    {Array.from({ length: 20 }).map((_, i) => (
+                      <div 
+                        key={i} 
+                        className="absolute text-lg whitespace-pre font-bold"
+                        style={{
+                          left: `${Math.random() * 100}%`,
+                          top: `-${Math.random() * 20}%`,
+                          animation: `fall ${1 + Math.random() * 2}s linear infinite`,
+                          opacity: 0.2 + Math.random() * 0.8
+                        }}
+                      >
+                        {Array.from({ length: 15 }).map(() => String.fromCharCode(0x30A0 + Math.random() * 96)).join('\n')}
+                      </div>
+                    ))}
+                    <style>{`
+                      @keyframes fall {
+                        0% { transform: translateY(-100%); }
+                        100% { transform: translateY(500px); }
+                      }
+                    `}</style>
+                    <div className="bg-black/80 px-6 py-4 rounded z-10 text-white font-bold animate-pulse text-xl">
+                      WAKE UP, GUEST.
+                    </div>
+                  </div>
+                ) : isPlaying ? (
+                  <div className="w-full h-full flex flex-col font-mono relative z-10">
+                    <div className="flex justify-between w-full mb-8 text-primary text-sm tracking-widest">
+                      <span>TRIVIA SCORE: {score} / {TRIVIA_QUESTIONS.length}</span>
                       <button onClick={closeGame} className="hover:text-white transition-colors">[EXIT]</button>
                     </div>
                     
-                    <div 
-                      className="relative bg-black border-2 border-primary/50 shadow-[0_0_15px_rgba(14,165,233,0.3)]"
-                      style={{ width: GRID_SIZE * 15, height: GRID_SIZE * 15 }}
-                    >
-                      {/* Snake */}
-                      {snake.map((segment, i) => (
-                        <div
-                          key={i}
-                          className="absolute bg-primary rounded-sm"
-                          style={{
-                            left: segment.x * 15,
-                            top: segment.y * 15,
-                            width: 13,
-                            height: 13,
-                            boxShadow: '0 0 5px #0ea5e9',
-                            opacity: i === 0 ? 1 : 0.8
-                          }}
-                        />
-                      ))}
-                      {/* Food */}
-                      <div
-                        className="absolute bg-red-500 rounded-full animate-pulse"
-                        style={{
-                          left: food.x * 15,
-                          top: food.y * 15,
-                          width: 13,
-                          height: 13,
-                          boxShadow: '0 0 8px red'
-                        }}
-                      />
-
-                      {gameOver && (
-                        <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center text-center">
-                          <span className="text-red-500 font-bold text-2xl mb-2 animate-pulse">GAME OVER</span>
-                          <span className="text-white text-sm mb-6">FINAL SCORE: {score}</span>
-                          <button 
-                            onClick={startGame}
-                            className="px-4 py-2 bg-primary/20 text-primary border border-primary hover:bg-primary hover:text-black transition-colors text-sm"
-                          >
-                            TRY AGAIN
-                          </button>
+                    {!gameOver ? (
+                      <motion.div 
+                        key={currentQuestion}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="flex-1 flex flex-col"
+                      >
+                        <h3 className="text-xl text-white font-bold mb-8">
+                          <span className="text-primary mr-2">root@wlug:~$</span>
+                          {TRIVIA_QUESTIONS[currentQuestion].q}
+                        </h3>
+                        <div className="space-y-3">
+                          {TRIVIA_QUESTIONS[currentQuestion].options.map((opt, i) => (
+                            <button
+                              key={i}
+                              onClick={() => handleAnswer(i)}
+                              className="w-full text-left px-4 py-3 bg-[#121212] border border-primary/20 text-gray-300 hover:text-white hover:bg-primary/20 hover:border-primary transition-all rounded"
+                            >
+                              <span className="text-primary mr-3 font-bold">[{String.fromCharCode(65 + i)}]</span>
+                              {opt}
+                            </button>
+                          ))}
                         </div>
-                      )}
-                    </div>
-                    <div className="mt-4 text-xs text-gray-500">USE WASD OR ARROW KEYS</div>
+                      </motion.div>
+                    ) : (
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="flex-1 flex flex-col items-center justify-center text-center"
+                      >
+                        <span className="text-primary font-bold text-3xl mb-4">TEST COMPLETE</span>
+                        <span className="text-white text-xl mb-8">FINAL SCORE: {score} / {TRIVIA_QUESTIONS.length}</span>
+                        <button 
+                          onClick={startGame}
+                          className="px-6 py-3 bg-primary/20 text-primary border border-primary hover:bg-primary hover:text-black transition-colors font-bold tracking-widest"
+                        >
+                          RETRY
+                        </button>
+                      </motion.div>
+                    )}
                   </div>
                 ) : (
                   <div 
-                    className="w-full h-full overflow-y-auto font-mono text-sm"
+                    className="w-full h-full overflow-y-auto font-mono text-sm leading-relaxed"
                     onClick={() => inputRef.current?.focus()}
                   >
                     {history.map((line, i) => (
-                      <div key={i} className={`mb-1.5 ${line.type === 'user' ? 'text-primary' : 'text-gray-400'}`}>
+                      <div key={i} className={`mb-1 ${line.type === 'user' ? 'text-white' : 'text-primary'}`}>
                         {line.content}
                       </div>
                     ))}
                     
-                    <form onSubmit={handleSubmit} className="flex items-center mt-3">
-                      <span className="text-primary mr-2 font-bold animate-pulse">&gt;</span>
+                    <form onSubmit={handleSubmit} className="flex items-center mt-2">
+                      <span className="text-white mr-2">guest@wlug:~$</span>
                       <input
                         ref={inputRef}
                         type="text"

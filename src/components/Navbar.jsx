@@ -17,16 +17,17 @@ const Navbar = () => {
     { path: '/', label: 'Home' },
     { path: '/events', label: 'Events' },
     { path: '/board', label: 'Board' },
+    { path: '#contact', label: 'Contact Us' }
   ];
 
   return (
     <nav 
-      className={`fixed top-0 inset-x-0 z-50 flex justify-center pt-6 transition-all duration-500 ${
+      className={`fixed top-0 inset-x-0 z-50 flex justify-center pt-6 px-4 transition-all duration-500 ${
         scrolled ? 'translate-y-0' : 'translate-y-2'
       }`}
     >
       <div 
-        className={`flex items-center gap-2 md:gap-8 px-4 py-2.5 rounded-full transition-all duration-500 border ${
+        className={`flex items-center justify-between gap-2 md:gap-8 px-4 md:px-6 py-2.5 rounded-full transition-all duration-500 border ${
           scrolled 
             ? 'bg-[#0A0A0F]/80 backdrop-blur-xl border-white/[0.08] shadow-2xl' 
             : 'bg-transparent border-transparent'
@@ -39,11 +40,14 @@ const Navbar = () => {
         <div className="flex items-center gap-1 md:gap-2">
           {links.map((link) => {
             const isActive = location.pathname === link.path;
+            const isAnchor = link.path.startsWith('#');
+            const Element = isAnchor ? 'a' : Link;
             return (
-              <Link
+              <Element
                 key={link.path}
-                to={link.path}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors ${
+                to={!isAnchor ? link.path : undefined}
+                href={isAnchor ? `/${link.path}` : undefined}
+                className={`relative px-2 md:px-4 py-2 text-sm font-medium transition-colors ${
                   isActive ? 'text-white' : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -58,7 +62,7 @@ const Navbar = () => {
                   {isActive && <Terminal className="w-3.5 h-3.5 text-primary" />}
                   {link.label}
                 </span>
-              </Link>
+              </Element>
             );
           })}
         </div>

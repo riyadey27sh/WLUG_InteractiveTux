@@ -1,11 +1,19 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, X, CalendarDays } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { ExternalLink, X } from 'lucide-react';
 import eventsData from '../data/events.json';
 import pastEventsData from '../data/past_events.json';
 
 const Events = () => {
   const [lightboxImage, setLightboxImage] = useState(null);
+  const timelineRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start center", "end center"]
+  });
+
+  const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   const formatDate = (dateStr) => {
     const d = new Date(dateStr);
@@ -30,12 +38,8 @@ const Events = () => {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="mb-24"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-mono mb-6">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            LIVE EVENTS HUB
-          </div>
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white mb-6">
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Initiatives</span>
+            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Events</span>
           </h1>
           <p className="text-gray-400 text-xl max-w-2xl leading-relaxed">
             From deep technical dives into the Linux Kernel to massive open source bootcamps, explore what we do.
@@ -45,9 +49,9 @@ const Events = () => {
         {/* ═══ WHAT WE CONDUCT ═══ */}
         <section className="mb-40">
           <motion.div 
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             className="flex items-center gap-4 mb-12"
           >
             <h2 className="text-3xl font-bold text-white tracking-tight">What We Conduct</h2>
@@ -58,9 +62,9 @@ const Events = () => {
             {eventsData.map((event, i) => (
               <motion.div
                 key={event.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
+                viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 className="group relative bg-[#0A0A0F] border border-white/[0.06] rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-500 shadow-2xl hover:shadow-primary/10 flex flex-col"
               >
@@ -97,76 +101,80 @@ const Events = () => {
         {/* ═══ PAST EVENTS TIMELINE ═══ */}
         <section>
           <motion.div 
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             className="flex items-center gap-4 mb-20"
           >
-            <h2 className="text-3xl font-bold text-white tracking-tight">Timeline</h2>
+            <h2 className="text-3xl font-bold text-white tracking-tight">Past Events</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-white/[0.1] to-transparent" />
           </motion.div>
 
-          <div className="relative border-l-2 border-white/[0.05] ml-4 md:ml-12 space-y-24 pb-12">
-            {pastEventsData.map((event, i) => {
-              const { month, day, year } = formatDate(event.date);
+          <div ref={timelineRef} className="relative ml-4 md:ml-12 pb-12">
+            
+            {/* Scroll-Linked Progress Line */}
+            <div className="absolute top-0 bottom-0 left-[7px] w-[2px] bg-white/[0.05]" />
+            <motion.div 
+              className="absolute top-0 bottom-0 left-[7px] w-[2px] bg-primary origin-top shadow-[0_0_15px_rgba(14,165,233,0.8)]"
+              style={{ scaleY }}
+            />
 
-              return (
-                <motion.div
-                  key={event.id}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.7 }}
-                  className="relative pl-10 md:pl-16"
-                >
-                  {/* Timeline Node */}
-                  <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-black border-2 border-primary ring-4 ring-[#0A0A0F] group-hover:scale-125 transition-transform" />
-                  
-                  <div className="flex flex-col md:flex-row gap-8">
-                    {/* Date Block */}
-                    <div className="md:w-32 flex-shrink-0">
-                      <div className="sticky top-24">
-                        <span className="block text-4xl font-black text-white">{day}</span>
-                        <span className="block text-sm font-bold text-primary uppercase tracking-widest">{month}</span>
-                        <span className="block text-sm font-mono text-gray-600">{year}</span>
-                      </div>
-                    </div>
+            <div className="space-y-24">
+              {pastEventsData.map((event, i) => {
+                const { month, day, year } = formatDate(event.date);
 
-                    {/* Content Block */}
-                    <div className="flex-1">
-                      <div className="tech-card p-8 md:p-10 shadow-2xl">
-                        <h4 className="text-3xl font-bold text-white mb-6">{event.title}</h4>
-                        <p className="text-lg text-gray-400 leading-relaxed mb-10">
-                          {event.description}
-                        </p>
-
-                        {/* Event Photos Grid */}
-                        {event.photos && event.photos.length > 0 && (
-                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            {event.photos.map((photo, j) => (
-                              <motion.div 
-                                key={j} 
-                                whileHover={{ scale: 1.05 }}
-                                className="aspect-video rounded-xl overflow-hidden cursor-pointer border border-white/[0.06] group shadow-lg"
-                                onClick={() => setLightboxImage({ src: photo, alt: `${event.title} photo ${j + 1}` })}
-                              >
-                                <img 
-                                  src={photo} 
-                                  alt="" 
-                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                                  loading="lazy" 
-                                />
-                                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                              </motion.div>
-                            ))}
+                return (
+                  <motion.div
+                    key={event.id}
+                    initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true, margin: "-150px" }}
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    className="relative pl-10 md:pl-16 group"
+                  >
+                    {/* Timeline Node */}
+                    <div className="absolute left-0 top-1.5 w-4 h-4 rounded-full bg-[#0A0A0F] border-2 border-white/20 group-hover:border-primary group-hover:shadow-[0_0_10px_rgba(14,165,233,0.5)] group-hover:scale-125 transition-all duration-300 z-10" />
+                    
+                    <div className="flex flex-col gap-8">
+                      {/* Content Block */}
+                      <div className="flex-1 w-full">
+                        <div className="tech-card p-8 md:p-10 shadow-2xl transition-all duration-500 hover:shadow-primary/5 hover:-translate-y-1">
+                          <h4 className="text-3xl font-bold text-white mb-2 group-hover:text-primary transition-colors">{event.title}</h4>
+                          <div className="text-sm font-mono text-primary uppercase tracking-widest mb-6">
+                            {day} {month} {year}
                           </div>
-                        )}
+                          <p className="text-lg text-gray-400 leading-relaxed mb-10">
+                            {event.description}
+                          </p>
+
+                          {/* Event Photos Grid */}
+                          {event.photos && event.photos.length > 0 && (
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              {event.photos.map((photo, j) => (
+                                <motion.div 
+                                  key={j} 
+                                  whileHover={{ scale: 1.05 }}
+                                  className="aspect-video rounded-xl overflow-hidden cursor-pointer border border-white/[0.06] group/photo shadow-lg relative"
+                                  onClick={() => setLightboxImage({ src: photo, alt: `${event.title} photo ${j + 1}` })}
+                                >
+                                  <img 
+                                    src={photo} 
+                                    alt="" 
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover/photo:scale-110" 
+                                    loading="lazy" 
+                                  />
+                                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/photo:opacity-100 transition-opacity" />
+                                </motion.div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </section>
       </div>
