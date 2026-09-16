@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useMotionTemplate, useMotionValue } from 'framer-motion';
+import { motion, AnimatePresence, useMotionTemplate, useMotionValue, useAnimation } from 'framer-motion';
 import { ArrowRight, Terminal, X, Mail, MessageSquare, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LinuxEasterEgg from '../components/LinuxEasterEgg';
@@ -14,31 +14,61 @@ const galleryItems = [
 
 // Authentic Linux Distro Image URLs
 const organicLogos = [
-  { src: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg", x: "15%", y: "20%", w: 64 },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Debian-OpenLogo.svg", x: "75%", y: "15%", w: 56 },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Archlinux-icon-crystal-64.svg", x: "85%", y: "60%", w: 60 },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png", x: "10%", y: "75%", w: 72 },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg", x: "50%", y: "85%", w: 56 },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg", x: "40%", y: "10%", w: 64 },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/4/42/Opensource.svg", x: "30%", y: "50%", w: 60 }
+  { src: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg", x: "10%", y: "25%", w: 64, mobX: "2%", mobY: "15%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Debian-OpenLogo.svg", x: "85%", y: "20%", w: 56, mobX: "80%", mobY: "18%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Archlinux-icon-crystal-64.svg", x: "85%", y: "70%", w: 60, mobX: "80%", mobY: "50%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png", x: "10%", y: "75%", w: 72, mobX: "2%", mobY: "75%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg", x: "70%", y: "85%", w: 56, mobX: "80%", mobY: "78%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg", x: "20%", y: "15%", w: 64, mobX: "2%", mobY: "45%" },
+  { src: "https://upload.wikimedia.org/wikipedia/commons/4/42/Opensource.svg", x: "15%", y: "50%", w: 60, mobX: "40%", mobY: "88%" }
 ];
 
 // Title letter animation variants
 const titleVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 40, rotateX: -90, scale: 0.8 },
   visible: (i) => ({
     opacity: 1,
     y: 0,
+    rotateX: 0,
+    scale: 1,
     transition: {
       delay: i * 0.05,
-      duration: 0.6,
-      ease: [0.22, 1, 0.36, 1]
+      type: "spring",
+      stiffness: 200,
+      damping: 12
+    }
+  }),
+  wave: (i) => ({
+    y: [0, -35, 0],
+    scale: [1, 1.3, 1],
+    transition: {
+      delay: i * 0.03,
+      duration: 0.5,
+      type: "spring",
+      stiffness: 300,
+      damping: 10
     }
   })
 };
 
 const Home = () => {
   const [lightboxImage, setLightboxImage] = useState(null);
+  
+  // Title Animation Controls
+  const controls = useAnimation();
+  const [isWaving, setIsWaving] = useState(false);
+  
+  useEffect(() => {
+    controls.start("visible");
+  }, [controls]);
+
+  const handleTitleClick = async () => {
+    if (isWaving) return;
+    setIsWaving(true);
+    await controls.start("wave");
+    controls.start("visible");
+    setIsWaving(false);
+  };
   
   // Flashlight Effect for PC
   const mouseX = useMotionValue(0);
@@ -94,42 +124,64 @@ const Home = () => {
           ))}
         </motion.div>
 
-        {/* Mobile Background Fallback (Floating Logos) */}
-        <div className="absolute inset-0 z-0 pointer-events-none md:hidden overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(14,165,233,0.05)_0%,transparent_100%)]">
+        {/* Mobile Background Fallback (Restricted Edges) */}
+        <div className="absolute inset-0 z-0 pointer-events-none md:hidden overflow-hidden">
           {organicLogos.map((logo, i) => (
-            <img
+            <motion.img
               key={`mob-${i}`}
               src={logo.src}
               alt="Distro"
-              className="absolute opacity-40 mix-blend-screen"
+              className="absolute opacity-20 mix-blend-screen"
               style={{
-                left: logo.x,
-                top: logo.y,
-                width: logo.w,
-                animation: `float ${10 + Math.random() * 10}s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 5}s`
+                left: logo.mobX,
+                top: logo.mobY,
+                width: logo.w * 0.75, // slightly smaller on mobile
+              }}
+              animate={{
+                y: [0, 15, 0],
+                rotate: [0, Math.random() * 10 - 5, 0]
+              }}
+              transition={{
+                duration: 6 + Math.random() * 4,
+                repeat: Infinity,
+                ease: "easeInOut"
               }}
             />
           ))}
-          <style>{`
-            @keyframes float {
-              0%, 100% { transform: translate(0, 0) rotate(0deg); }
-              50% { transform: translate(${Math.random() * 40 - 20}px, ${Math.random() * 40 - 20}px) rotate(${Math.random() * 90 - 45}deg); }
-            }
-          `}</style>
         </div>
 
         <div className="max-w-5xl mx-auto text-center relative z-10 pointer-events-none">
           {/* Animated Title in two distinct lines */}
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter text-white mb-6 leading-tight drop-shadow-2xl flex flex-col items-center justify-center gap-y-2">
-            <span className="inline-flex">
+          <h1 
+            onClick={handleTitleClick}
+            className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-6 leading-tight drop-shadow-2xl flex flex-col items-center justify-center gap-y-2 cursor-pointer select-none perspective-[1000px] pointer-events-auto"
+          >
+            <span className="inline-flex text-white">
               {"Walchand Linux".split("").map((char, i) => (
-                <motion.span custom={i} variants={titleVariants} initial="hidden" animate="visible" key={`line1-${i}`}>{char === " " ? "\u00A0" : char}</motion.span>
+                <motion.span 
+                  custom={i} 
+                  variants={titleVariants} 
+                  initial="hidden" 
+                  animate={controls} 
+                  key={`line1-${i}`}
+                  className="inline-block origin-bottom"
+                >
+                  {char === " " ? "\u00A0" : char}
+                </motion.span>
               ))}
             </span>
-            <span className="inline-flex text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500">
+            <span className="inline-flex">
               {"Users' Group".split("").map((char, i) => (
-                <motion.span custom={i + 14} variants={titleVariants} initial="hidden" animate="visible" key={`line2-${i}`}>{char === " " ? "\u00A0" : char}</motion.span>
+                <motion.span 
+                  custom={i + 14} 
+                  variants={titleVariants} 
+                  initial="hidden" 
+                  animate={controls} 
+                  key={`line2-${i}`}
+                  className="inline-block origin-bottom text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500"
+                >
+                  {char === " " ? "\u00A0" : char}
+                </motion.span>
               ))}
             </span>
           </h1>
