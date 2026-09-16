@@ -1,0 +1,51 @@
+{
+  "year": "2025",
+  "mentor": [
+    {
+      "name": "Prof. R. K. Joshi",
+      "position": "Faculty Mentor",
+      "quote": "Open source is not just about code, it's about community.",
+      "photo": "",
+      "github": "",
+      "linkedin": "rkjoshi"
+    }
+  ],
+  "main": [
+    {
+      "name": "Bhargav Patil",
+      "position": "President",
+      "quote": "Linux is not just an OS, it's a philosophy.",
+      "photo": "",
+      "github": "bhargavpatil",
+      "linkedin": "bhargav-patil"
+    },
+    {
+      "name": "Sneha Kulkarni",
+      "position": "Vice President",
+      "quote": "sudo make the world better",
+      "photo": "",
+      "github": "snehak",
+      "linkedin": "sneha-kulkarni"
+    }
+  ],
+  "assistant": [
+    {
+      "name": "Rahul Verma",
+      "position": "Assistant Secretary",
+      "quote": "Automate everything.",
+      "photo": "",
+      "github": "rahulv",
+      "linkedin": "rahul-verma"
+    }
+  ],
+  "member": [
+    {
+      "name": "Ananya Singh",
+      "position": "Member",
+      "quote": "grep for truth.",
+      "photo": "",
+      "github": "ananyas",
+      "linkedin": "ananya-singh"
+    }
+  ]
+}

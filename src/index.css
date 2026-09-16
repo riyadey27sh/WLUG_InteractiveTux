@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-white antialiased selection:bg-primary/30 selection:text-white;
+  }
+}
+
+@layer components {
+  /* Tech Button */
+  .tech-button {
+    @apply relative inline-flex items-center justify-center px-8 py-3.5 
+           bg-white text-black font-semibold text-sm rounded-full 
+           overflow-hidden transition-all duration-300 hover:scale-[1.02];
+  }
+  
+  .tech-button::before {
+    content: '';
+    @apply absolute inset-0 bg-primary/20 opacity-0 transition-opacity duration-300 blur-xl;
+  }
+  
+  .tech-button:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Outline Tech Button */
+  .tech-button-outline {
+    @apply relative inline-flex items-center justify-center px-8 py-3.5 
+           bg-transparent text-white font-semibold text-sm rounded-full 
+           border border-white/[0.15] transition-all duration-300 hover:bg-white/[0.05];
+  }
+
+  /* Sharp Tech Card */
+  .tech-card {
+    @apply bg-[#12121A] border border-white/[0.06] rounded-xl 
+           transition-all duration-300 hover:border-white/[0.15] hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0A0F;
+}
+::-webkit-scrollbar-thumb {
+  background: #2A2A35;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3A3A45;
+}

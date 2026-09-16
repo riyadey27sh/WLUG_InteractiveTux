@@ -1,0 +1,50 @@
+[
+  {
+    "id": "linux-booting",
+    "title": "Linux Booting Process & Architecture",
+    "description": "Deep technical workshop focusing exclusively on the Linux kernel architecture, initrd, systemd initialization, and bootloader sequence (GRUB).",
+    "poster": "https://images.unsplash.com/photo-1629654297299-c8506221ca97?auto=format&fit=crop&q=80&w=1000",
+    "link": "",
+    "isClubService": true
+  },
+  {
+    "id": "linux-diary",
+    "title": "Linux Diary",
+    "description": "Our flagship 3-day boot camp covering basic to advanced Linux concepts, shell scripting, and server deployments.",
+    "poster": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1000",
+    "link": "https://linuxdiary.wlug.club",
+    "isClubService": false
+  },
+  {
+    "id": "open-source-day",
+    "title": "Open Source Day",
+    "description": "A celebration of FOSS culture, featuring talks, code sprints, and guidance for Hacktoberfest and GSOC.",
+    "poster": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000",
+    "link": "https://osd.wlug.club",
+    "isClubService": false
+  },
+  {
+    "id": "rha-day",
+    "title": "RHA Day",
+    "description": "Red Hat Academy Day. Specialized workshops covering enterprise Linux, containers, and Kubernetes basics.",
+    "poster": "https://images.unsplash.com/photo-1596496050827-8299e0220de1?auto=format&fit=crop&q=80&w=1000",
+    "link": "https://rha.wlug.club",
+    "isClubService": false
+  },
+  {
+    "id": "metamorphosis",
+    "title": "Metamorphosis",
+    "description": "A state-level technical symposium where developers showcase projects and compete in hackathons.",
+    "poster": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1000",
+    "link": "https://metamorphosis.wlug.club",
+    "isClubService": false
+  },
+  {
+    "id": "spandan",
+    "title": "Spandan",
+    "description": "A soft-skills and technical management event focusing on communication, teamwork, and tech leadership.",
+    "poster": "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=1000",
+    "link": "https://spandan.wlug.club",
+    "isClubService": false
+  }
+]

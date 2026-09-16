@@ -1,0 +1,41 @@
+{
+  "2024": {
+    "mentor": [
+      {
+        "name": "Prof. R. K. Joshi",
+        "position": "Faculty Mentor",
+        "quote": "Mentoring the next generation.",
+        "photo": "",
+        "github": "",
+        "linkedin": ""
+      }
+    ],
+    "main": [
+      {
+        "name": "Aditya Sharma",
+        "position": "President",
+        "quote": "FOSS is life.",
+        "photo": "",
+        "github": "adityas",
+        "linkedin": "aditya-sharma"
+      }
+    ],
+    "assistant": [],
+    "member": []
+  },
+  "2023": {
+    "mentor": [],
+    "main": [
+      {
+        "name": "Karan Patel",
+        "position": "President",
+        "quote": "We build.",
+        "photo": "",
+        "github": "karanp",
+        "linkedin": "karan-patel"
+      }
+    ],
+    "assistant": [],
+    "member": []
+  }
+}
