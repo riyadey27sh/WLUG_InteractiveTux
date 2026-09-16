@@ -59,6 +59,18 @@ const LinuxEasterEgg = ({ children }) => {
     }
   }, [isOpen, isPlaying, isMatrix, history]);
 
+  // Prevent background scrolling
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   // Scroll to bottom
   useEffect(() => {
     if (bottomRef.current) {
