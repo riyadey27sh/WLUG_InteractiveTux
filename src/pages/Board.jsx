@@ -125,20 +125,20 @@ const Board = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.4 }}
-              className="space-y-16"
+              className="space-y-8"
             >
               {/* Year Selector Dropdown */}
               <div className="flex justify-center mb-16 relative z-30">
                 <div className="relative">
                   <button 
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="flex items-center justify-between gap-4 w-64 bg-[#0A0A0F] border border-primary/30 rounded-xl px-6 py-4 text-white hover:bg-primary/5 transition-colors shadow-[0_0_20px_rgba(14,165,233,0.15)]"
+                    className="flex items-center justify-between gap-3 w-48 bg-[#0A0A0F] border border-primary/30 rounded-xl px-4 py-3 text-white hover:bg-primary/5 transition-colors shadow-[0_0_20px_rgba(14,165,233,0.15)]"
                   >
                     <div className="flex flex-col items-start">
-                      <span className="text-xs font-mono text-gray-500 uppercase">Viewing Year</span>
-                      <span className="text-xl font-bold">{selectedYear}</span>
+                      <span className="text-[10px] font-mono text-gray-500 uppercase">Viewing Year</span>
+                      <span className="text-lg font-bold">{selectedYear}</span>
                     </div>
-                    <ChevronDown className={`w-5 h-5 text-primary transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-4 h-4 text-primary transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   <AnimatePresence>
@@ -147,7 +147,7 @@ const Board = () => {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute top-full mt-2 w-full bg-[#12121A] border border-white/10 rounded-xl overflow-hidden shadow-2xl"
+                        className="absolute top-full mt-2 w-full max-h-64 overflow-y-auto no-scrollbar bg-[#12121A] border border-white/10 rounded-xl shadow-2xl"
                       >
                         {alumniYears.map(year => (
                           <button
@@ -167,30 +167,12 @@ const Board = () => {
               </div>
 
               {/* Display selected year board */}
-              <div className="space-y-24 relative z-10">
-                {Object.entries(tierMeta).map(([tier, label]) => {
-                  const yearBoard = pastBoardsData[selectedYear];
-                  const members = yearBoard[tier] || [];
-                  if (members.length === 0) return null;
-
-                  return (
-                    <motion.div 
-                      key={`${selectedYear}-${tier}`}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <h4 className="text-lg font-bold text-gray-400 uppercase tracking-widest mb-16 border-b border-white/[0.06] pb-4 text-center">
-                        {label}
-                      </h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16 mt-8">
-                        {members.map((member, i) => (
-                          <MemberCard key={member.name} member={member} index={i} />
-                        ))}
-                      </div>
-                    </motion.div>
-                  );
-                })}
+              <div className="relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16 mt-8">
+                  {pastBoardsData[selectedYear]?.map((member, i) => (
+                    <MemberCard key={member.name} member={member} index={i} />
+                  ))}
+                </div>
               </div>
             </motion.div>
           )}
@@ -224,9 +206,11 @@ const MemberCard = ({ member, index }) => {
 
       <div className="flex-1 flex flex-col text-center">
         <h3 className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{member.name}</h3>
-        <p className="text-[10px] text-gray-500 font-mono tracking-widest uppercase mb-6">
-          {member.position}
-        </p>
+        {member.position && (
+          <p className="text-[10px] text-gray-500 font-mono tracking-widest uppercase mb-6">
+            {member.position}
+          </p>
+        )}
 
         {member.quote && (
           <div className="mt-auto mb-6 relative group-hover:text-gray-300 transition-colors">

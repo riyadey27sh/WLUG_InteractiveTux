@@ -14,59 +14,17 @@ const galleryItems = [
 
 // Authentic Linux Distro Image URLs
 const organicLogos = [
-  { src: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg", x: "10%", y: "25%", w: 64, mobX: "2%", mobY: "12%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Debian-OpenLogo.svg", x: "85%", y: "20%", w: 56, mobX: "80%", mobY: "18%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Archlinux-icon-crystal-64.svg", x: "85%", y: "70%", w: 60, mobX: "85%", mobY: "82%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png", x: "10%", y: "75%", w: 72, mobX: "5%", mobY: "85%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg", x: "70%", y: "85%", w: 56, mobX: "60%", mobY: "90%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg", x: "20%", y: "15%", w: 64, mobX: "2%", mobY: "25%" },
-  { src: "https://upload.wikimedia.org/wikipedia/commons/4/42/Opensource.svg", x: "15%", y: "50%", w: 60, mobX: "20%", mobY: "88%" }
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ubuntu/ubuntu-original.svg", x: "10%", y: "25%", w: 64, mobX: "2%", mobY: "12%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/debian/debian-original.svg", x: "85%", y: "20%", w: 56, mobX: "80%", mobY: "18%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/archlinux/archlinux-original.svg", x: "85%", y: "70%", w: 60, mobX: "85%", mobY: "82%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg", x: "10%", y: "75%", w: 72, mobX: "5%", mobY: "85%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg", x: "70%", y: "85%", w: 56, mobX: "60%", mobY: "90%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg", x: "20%", y: "15%", w: 64, mobX: "2%", mobY: "25%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg", x: "15%", y: "50%", w: 60, mobX: "20%", mobY: "88%" }
 ];
-
-// Title letter animation variants
-const titleVariants = {
-  hidden: { opacity: 0, y: 40, rotateX: -90, scale: 0.8 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    scale: 1,
-    transition: {
-      delay: i * 0.05,
-      type: "spring",
-      stiffness: 200,
-      damping: 12
-    }
-  }),
-  wave: (i) => ({
-    y: [0, -40, 0],
-    scale: [1, 1.3, 1],
-    transition: {
-      delay: i * 0.03,
-      duration: 0.6,
-      ease: "easeInOut"
-    }
-  })
-};
 
 const Home = () => {
   const [lightboxImage, setLightboxImage] = useState(null);
-  
-  // Title Animation Controls
-  const controls = useAnimation();
-  const [isWaving, setIsWaving] = useState(false);
-  
-  useEffect(() => {
-    controls.start("visible");
-  }, [controls]);
-
-  const handleTitleClick = async () => {
-    if (isWaving) return;
-    setIsWaving(true);
-    await controls.start("wave");
-    controls.start("visible");
-    setIsWaving(false);
-  };
   
   // Flashlight Effect for PC
   const mouseX = useMotionValue(0);
@@ -154,38 +112,13 @@ const Home = () => {
         </div>
 
         <div className="max-w-5xl mx-auto text-center relative z-10">
-          {/* Animated Title in two distinct lines */}
-          <h1 
-            onClick={handleTitleClick}
-            className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-6 leading-tight drop-shadow-2xl flex flex-col items-center justify-center gap-y-2 cursor-pointer select-none perspective-[1000px]"
-          >
+          {/* Static Title in two distinct lines */}
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-6 leading-tight drop-shadow-2xl flex flex-col items-center justify-center gap-y-2 select-none perspective-[1000px]">
             <span className="inline-flex text-white">
-              {"Walchand Linux".split("").map((char, i) => (
-                <motion.span 
-                  custom={i} 
-                  variants={titleVariants} 
-                  initial="hidden" 
-                  animate={controls} 
-                  key={`line1-${i}`}
-                  className="inline-block origin-bottom"
-                >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              ))}
+              Walchand Linux
             </span>
-            <span className="inline-flex">
-              {"Users' Group".split("").map((char, i) => (
-                <motion.span 
-                  custom={i + 14} 
-                  variants={titleVariants} 
-                  initial="hidden" 
-                  animate={controls} 
-                  key={`line2-${i}`}
-                  className="inline-block origin-bottom text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500"
-                >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              ))}
+            <span className="inline-flex text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500">
+              Users' Group
             </span>
           </h1>
 
@@ -195,9 +128,9 @@ const Home = () => {
             transition={{ duration: 1, delay: 0.8 }}
             className="flex flex-wrap items-center justify-center gap-3 md:gap-8 text-xs md:text-2xl font-mono text-primary font-bold uppercase tracking-[0.2em] md:tracking-[0.25em] mb-12 drop-shadow-[0_0_10px_rgba(14,165,233,0.3)] pointer-events-auto"
           >
-            <motion.span whileHover={{ scale: 1.1, color: "#fff" }} className="cursor-default transition-colors">Community.</motion.span>
-            <motion.span whileHover={{ scale: 1.1, color: "#fff" }} className="cursor-default transition-colors">Knowledge.</motion.span>
-            <motion.span whileHover={{ scale: 1.1, color: "#fff" }} className="cursor-default transition-colors">Share.</motion.span>
+            <motion.span whileHover={{ scale: 1.1, color: "#fff" }} className="cursor-default transition-colors">Community</motion.span>
+            <motion.span whileHover={{ scale: 1.1, color: "#fff" }} className="cursor-default transition-colors">Knowledge</motion.span>
+            <motion.span whileHover={{ scale: 1.1, color: "#fff" }} className="cursor-default transition-colors">Share</motion.span>
           </motion.div>
 
           <motion.div
@@ -309,24 +242,6 @@ const Home = () => {
                 }`}
                 loading="lazy"
               />
-              <AnimatePresence>
-                {!isGrid && (
-                  <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="pt-2 md:pt-4 pb-1 md:pb-2 text-center text-black/70 font-medium text-[10px] md:text-sm font-mono pointer-events-none"
-                  >
-                    {img.alt}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              {isGrid && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 md:p-6 pointer-events-none z-10">
-                  <span className="text-white text-xs md:text-lg font-bold translate-y-4 group-hover:translate-y-0 transition-transform duration-300">{img.alt}</span>
-                  <div className="w-4 md:w-8 h-0.5 md:h-1 bg-primary mt-2 md:mt-3 rounded-full origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-100" />
-                </div>
-              )}
             </motion.div>
           ))}
         </div>
