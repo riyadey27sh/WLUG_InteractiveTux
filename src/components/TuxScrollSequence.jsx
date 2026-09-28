@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Terminal, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 import LinuxEasterEgg from './LinuxEasterEgg';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -15,6 +16,7 @@ const TuxScrollSequence = () => {
   const canvasRef = useRef(null);
   const contentRef = useRef(null);
   const heroRef = useRef(null);
+  const logosRef = useRef(null);
   
   const { images, isLoaded } = usePreload();
 
@@ -76,33 +78,39 @@ const TuxScrollSequence = () => {
           trigger: containerRef.current,
           pin: true,
           start: "top top",
-          end: "+=3000",
-          scrub: 1, // Smooth scrub
+          end: "+=4000",
+          scrub: 1.2, // Numeric scrub for smooth physics easing
         }
       });
 
-      // 1. Animate Hero Section out (0% to 25%)
+      // 1. Animate Hero Section out (0% to 15%)
       tl.to(heroRef.current, {
         opacity: 0,
-        y: -40,
+        y: -30,
         ease: "power2.inOut",
-        duration: 0.25
+        duration: 0.15
       }, 0);
 
-      // 2. Animate frame sequence over 0% to 80% of scroll
+      // 2. Fade out Distro Logos (0% to 20%)
+      tl.to(logosRef.current, {
+        opacity: 0,
+        ease: "power1.inOut",
+        duration: 0.20
+      }, 0);
+
+      // 3. Animate frame sequence over 15% to 75% of scroll
       tl.to(currentFrame, {
         frame: TOTAL_FRAMES - 1,
-        snap: "frame",
         ease: "none",
-        duration: 0.8,
+        duration: 0.60,
         onUpdate: () => renderFrame(currentFrame.frame)
-      }, 0);
+      }, 0.15);
 
-      // 3. Animate the About Section text to fade in (50% to 100%)
+      // 4. Animate the About Section text to fade in (70% to 100%)
       tl.fromTo(contentRef.current, 
         { opacity: 0, x: 50 }, 
-        { opacity: 1, x: 0, ease: "power2.out", duration: 0.5 }, 
-        0.5 
+        { opacity: 1, x: 0, ease: "power2.out", duration: 0.30 }, 
+        0.70 
       );
     }, containerRef);
 
@@ -113,39 +121,45 @@ const TuxScrollSequence = () => {
   }, [isLoaded, images]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-screen bg-[#000000] overflow-hidden">
+    <div 
+      ref={containerRef} 
+      className="relative w-full h-screen bg-[#000000] overflow-hidden"
+    >
       
-      {/* Canvas Layer */}
+      {/* Layer 0: Ambient Aura (Ultra-diffuse) */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1C3041_0%,transparent_70%)] opacity-25 blur-3xl pointer-events-none -z-10" />
+
+      {/* Layer 1: Clean Faint Dot Grid Pattern */}
+      <div ref={logosRef} className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-20 z-10" />
+
+      {/* Layer 2: Canvas Layer */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 w-full h-full object-cover z-0" 
+        className="absolute inset-0 w-full h-full object-cover z-20 pointer-events-none mix-blend-screen" 
         style={{ filter: 'contrast(1.2) brightness(0.85)' }}
       />
 
-      {/* Vignette Overlay to seamlessly blend edges into pure black */}
-      <div className="absolute inset-0 z-[5] pointer-events-none bg-[radial-gradient(circle_at_center,transparent_40%,rgba(0,0,0,0.8)_80%,#000000_100%)]" />
-
-      {/* HERO SECTION OVERLAY (Centered) */}
+      {/* Layer 3: HERO SECTION OVERLAY (Centered) */}
       <div 
         ref={heroRef}
-        className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none"
+        className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none"
       >
         <div className="max-w-5xl mx-auto text-center px-4 md:px-6 pointer-events-auto">
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-6 leading-tight flex flex-col items-center justify-center gap-y-2 select-none drop-shadow-[0_0_25px_rgba(28,48,65,0.8)]">
-            <span className="inline-flex text-[#FFFFFF]">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6 leading-tight flex flex-col items-center justify-center select-none drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
+            <span className="text-[#FFFFFF]">
               Walchand Linux
             </span>
-            <span className="inline-flex text-transparent bg-clip-text bg-gradient-to-r from-[#D4E9F7] to-[#A0C4E2]">
+            <span className="text-[#A0C4E2]">
               Users' Group
             </span>
           </h1>
 
-          {/* Tagline */}
-          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-8 text-xs md:text-2xl font-mono text-[#A0C4E2] font-bold uppercase tracking-[0.2em] md:tracking-[0.25em] mb-12 drop-shadow-[0_0_15px_rgba(28,48,65,0.8)]">
-            <span className="cursor-default">CODE</span>
-            <span className="cursor-default">COLLABORATE</span>
-            <span className="cursor-default">CONTRIBUTE</span>
+          {/* Tagline / Motto - sleek glassmorphic pill badge */}
+          <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#1C3041]/50 border border-white/10 backdrop-blur-md mb-8">
+            <span className="text-xs md:text-sm font-mono tracking-[0.25em] text-[#D4E9F7]">
+              CODE · COLLABORATE · CONTRIBUTE
+            </span>
           </div>
 
           {/* CTA Buttons */}
@@ -156,7 +170,7 @@ const TuxScrollSequence = () => {
             </Link>
             <button 
               onClick={() => window.scrollTo({ top: window.innerHeight * 1.5, behavior: 'smooth' })} 
-              className="flex items-center justify-center px-6 py-3 md:px-8 md:py-4 border-2 border-[#1C3041] hover:border-[#A0C4E2] text-[#A0C4E2] hover:text-[#FFFFFF] hover:bg-[#1C3041]/30 rounded-lg font-bold transition-all duration-300 backdrop-blur-sm"
+              className="flex items-center justify-center px-6 py-3 md:px-8 md:py-4 border-2 border-[#1C3041] hover:border-[#A0C4E2] text-[#A0C4E2] hover:text-[#FFFFFF] hover:bg-[#1C3041]/30 rounded-lg font-bold transition-all duration-300 backdrop-blur-sm shadow-lg shadow-black/50"
             >
               Discover More
             </button>
@@ -164,8 +178,8 @@ const TuxScrollSequence = () => {
         </div>
       </div>
 
-      {/* Content Layer (About Section) */}
-      <div className="absolute inset-0 z-10 flex flex-col md:flex-row items-center pointer-events-none">
+      {/* Content Layer (About Section, higher z-index to overlay) */}
+      <div className="absolute inset-0 z-40 flex flex-col md:flex-row items-center pointer-events-none">
         
         {/* Left Space (Empty for Tux subject) */}
         <div className="hidden md:block w-1/2 h-full" />

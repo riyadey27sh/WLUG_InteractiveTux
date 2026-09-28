@@ -23,7 +23,7 @@ export function BootProvider({ children }) {
       const onImageLoaded = () => {
         loadedCount++;
         setProgress(Math.floor((loadedCount / TOTAL_FRAMES) * 100));
-        loadedImages.push(img);
+        loadedImages[i - 1] = img;
         if (loadedCount === TOTAL_FRAMES) {
           setImages(loadedImages);
           setIsLoaded(true);
