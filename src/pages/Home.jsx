@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useMotionTemplate, useMotionValue, useAnimation } from 'framer-motion';
 import { ArrowRight, Terminal, X, Mail, MessageSquare, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import LinuxEasterEgg from '../components/LinuxEasterEgg';
+import TuxScrollSequence from '../components/TuxScrollSequence';
 
 const galleryItems = [
   { id: 1, src: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=800", alt: "Community Meetup", rotate: -5, col: "col-span-2", row: "row-span-2" },
@@ -151,44 +151,8 @@ const Home = () => {
       </section>
 
       {/* ═══ ABOUT US ═══ */}
-      <section id="about" className="py-24 md:py-32 px-6 border-t border-white/[0.06] relative">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[150px] rounded-full pointer-events-none" />
-        
-        <div className="max-w-4xl mx-auto relative z-10 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 tracking-tight">
-              About <span className="text-primary">Us</span>.
-            </h2>
-            <div className="space-y-6 text-gray-400 leading-relaxed text-base md:text-lg mb-12">
-              <p>
-                Established in 2003 at Walchand College of Engineering, Sangli.
-                WLUG is a collective of passionate developers and open-source purists.
-              </p>
-              <p>
-                We bridge the gap between beginners and fully-fledged open-source contributors.
-                From bootcamps and hackathons to technical deep-dives, our mission is to empower through knowledge.
-              </p>
-            </div>
-
-            {/* Seamless Terminal Trigger */}
-            <div className="flex justify-center mt-12">
-              <LinuxEasterEgg>
-                <div className="inline-flex items-center gap-3 px-4 md:px-5 py-3 rounded-lg bg-[#0A0A0F] border border-white/10 hover:border-primary/50 text-gray-400 hover:text-white transition-all cursor-pointer group shadow-xl max-w-full overflow-hidden">
-                  <Terminal className="w-4 h-4 text-primary flex-shrink-0" />
-                  <span className="font-mono text-xs md:text-sm tracking-wide truncate">
-                    guest@wlug:~$ <span className="text-primary group-hover:text-white transition-colors">./init.sh</span>
-                  </span>
-                  <span className="w-1.5 h-3 md:w-2 md:h-4 bg-primary/50 animate-pulse ml-1 flex-shrink-0" />
-                </div>
-              </LinuxEasterEgg>
-            </div>
-          </motion.div>
-        </div>
+      <section id="about" className="relative border-t border-white/[0.06]">
+        <TuxScrollSequence />
       </section>
 
       {/* ═══ GALLERY (DECK TO GRID) ═══ */}
