@@ -21,49 +21,54 @@ const Navbar = () => {
 
   return (
     <nav 
-      className={`fixed top-0 inset-x-0 z-50 pt-3 md:pt-4 transition-all duration-500 pointer-events-none ${
-        scrolled ? 'translate-y-0' : 'translate-y-2'
+      className={`fixed top-0 left-0 w-full px-8 md:px-12 py-5 flex items-center justify-between z-50 transition-all duration-500 pointer-events-auto ${
+        scrolled ? 'bg-[#0A0A0F]/80 backdrop-blur-xl border-b border-white/[0.08]' : 'bg-transparent'
       }`}
     >
-      <div className="w-full px-4 md:px-8 flex relative items-center justify-end md:justify-center">
-        
-        {/* Absolute Logo outside navbar box */}
-        <Link to="/" className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 pointer-events-auto flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <img src="/wlug-logo.webp" alt="WLUG Logo" className="h-10 md:h-12 object-contain" />
-        </Link>
-
-        {/* Navbar Links Box */}
-        <div 
-          className={`pointer-events-auto flex items-center gap-2 md:gap-6 px-4 md:px-6 py-2.5 rounded-full transition-all duration-500 border border-white/[0.08] ${
-            scrolled ? 'bg-[#0A0A0F]/80 backdrop-blur-xl shadow-2xl' : 'bg-transparent'
-          }`}
-        >
-          {links.map((link) => {
-            const isActive = location.pathname === link.path;
-            const Element = Link;
-            return (
-              <Element
-                key={link.path}
-                to={link.path}
-                className={`relative px-3 md:px-5 py-2 text-xs md:text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
-                  isActive ? 'text-white' : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                {isActive && (
-                  <motion.div
-                    layoutId="active-pill"
-                    className="absolute inset-0 bg-white/[0.06] rounded-full border border-white/[0.05]"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
-                )}
-                <span className="relative z-10 flex items-center gap-1.5">
-                  {isActive && <Terminal className="w-3.5 h-3.5 text-primary" />}
-                  {link.label}
-                </span>
-              </Element>
-            );
-          })}
+      {/* Left: WLUG Logo and branding text */}
+      <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <img src="/wlug-logo.webp" alt="WLUG Logo" className="h-10 md:h-12 object-contain" />
+        <div className="hidden sm:flex flex-col">
+          <span className="text-white font-bold text-sm leading-tight tracking-tight">Walchand Linux</span>
+          <span className="text-[#A0C4E2] text-[10px] uppercase font-mono tracking-wider">Users' Group</span>
         </div>
+      </Link>
+
+      {/* Center/Right: Nav items */}
+      <div className="hidden md:flex items-center gap-2">
+        {links.map((link) => {
+          const isActive = location.pathname === link.path;
+          return (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`relative px-5 py-2 text-sm font-mono transition-colors whitespace-nowrap rounded-full ${
+                isActive ? 'text-white' : 'text-gray-400 hover:text-white hover:bg-white/[0.03]'
+              }`}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="active-pill"
+                  className="absolute inset-0 bg-white/[0.06] rounded-full border border-white/[0.05]"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-2">
+                {isActive && <Terminal className="w-3.5 h-3.5 text-[#A0C4E2]" />}
+                {link.label}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Far Right: Interactive terminal pill button */}
+      <div className="flex items-center">
+        <button className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1C3041] hover:bg-[#A0C4E2] text-[#FFFFFF] hover:text-[#1C3041] border border-white/10 font-mono text-sm font-bold transition-all duration-300 group">
+          <Terminal className="w-4 h-4" />
+          <span className="hidden sm:inline">&gt;_ ./join.sh</span>
+          <span className="sm:hidden">Join</span>
+        </button>
       </div>
     </nav>
   );

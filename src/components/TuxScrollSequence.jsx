@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { Terminal, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import LinuxEasterEgg from './LinuxEasterEgg';
+import InteractiveDotGrid from './InteractiveDotGrid';
+import DistroSpotlightOrbit from './DistroSpotlightOrbit';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { usePreload } from './boot/BootProvider';
@@ -30,17 +32,23 @@ const TuxScrollSequence = () => {
     // Handle High DPI and Resizing
     const resizeCanvas = () => {
       const dpr = window.devicePixelRatio || 1;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
       
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
       
+      const ctx = canvas.getContext('2d');
       ctx.scale(dpr, dpr);
       renderFrame(currentFrame.frame);
     };
 
     // Draw frame onto canvas with cover aspect ratio
     const renderFrame = (index) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
       const img = images[Math.round(index)];
       if (!img || !img.complete || img.naturalWidth === 0) return;
 
@@ -51,7 +59,7 @@ const TuxScrollSequence = () => {
       // Cover scaling
       const hRatio = canvasWidth / img.width;
       const vRatio = canvasHeight / img.height;
-      const ratio = Math.max(hRatio, vRatio); // Use Math.max for cover, Math.min for contain
+      const ratio = Math.max(hRatio, vRatio);
       
       const centerShift_x = (canvasWidth - img.width * ratio) / 2;
       const centerShift_y = (canvasHeight - img.height * ratio) / 2;
@@ -78,27 +86,20 @@ const TuxScrollSequence = () => {
           trigger: containerRef.current,
           pin: true,
           start: "top top",
-          end: "+=4000",
-          scrub: 1.2, // Numeric scrub for smooth physics easing
+          end: "+=1800px",
+          scrub: 1, // Numeric scrub for smooth physics easing
         }
       });
 
       // 1. Animate Hero Section out (0% to 15%)
       tl.to(heroRef.current, {
         opacity: 0,
-        y: -30,
+        y: -20,
         ease: "power2.inOut",
         duration: 0.15
       }, 0);
 
-      // 2. Fade out Distro Logos (0% to 20%)
-      tl.to(logosRef.current, {
-        opacity: 0,
-        ease: "power1.inOut",
-        duration: 0.20
-      }, 0);
-
-      // 3. Animate frame sequence over 15% to 75% of scroll
+      // 2. Animate frame sequence over 15% to 75% of scroll
       tl.to(currentFrame, {
         frame: TOTAL_FRAMES - 1,
         ease: "none",
@@ -106,11 +107,11 @@ const TuxScrollSequence = () => {
         onUpdate: () => renderFrame(currentFrame.frame)
       }, 0.15);
 
-      // 4. Animate the About Section text to fade in (70% to 100%)
+      // 4. Animate the About Section text to fade in (50% to 100%)
       tl.fromTo(contentRef.current, 
         { opacity: 0, x: 50 }, 
-        { opacity: 1, x: 0, ease: "power2.out", duration: 0.30 }, 
-        0.70 
+        { opacity: 1, x: 0, ease: "power2.out", duration: 0.50 }, 
+        0.50 
       );
     }, containerRef);
 
@@ -126,53 +127,55 @@ const TuxScrollSequence = () => {
       className="relative w-full h-screen bg-[#000000] overflow-hidden"
     >
       
-      {/* Layer 0: Ambient Aura (Ultra-diffuse) */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1C3041_0%,transparent_70%)] opacity-25 blur-3xl pointer-events-none -z-10" />
+      {/* Background Grids */}
+      <div ref={logosRef} className="absolute inset-0 z-0">
+        {/* Layer 0: Interactive Dot Grid */}
+        <InteractiveDotGrid />
+        
+        {/* Layer 1: Distro Spotlight Orbit */}
+        <DistroSpotlightOrbit />
+      </div>
 
-      {/* Layer 1: Clean Faint Dot Grid Pattern */}
-      <div ref={logosRef} className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-20 z-10" />
-
-      {/* Layer 2: Canvas Layer */}
+      {/* Layer 2: Tux Canvas Layer */}
       <canvas 
         ref={canvasRef} 
         className="absolute inset-0 w-full h-full object-cover z-20 pointer-events-none mix-blend-screen" 
         style={{ filter: 'contrast(1.2) brightness(0.85)' }}
       />
 
-      {/* Layer 3: HERO SECTION OVERLAY (Centered) */}
+      {/* Layer 3: HERO SECTION OVERLAY (Left-Anchored) */}
       <div 
         ref={heroRef}
-        className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none"
+        className="absolute inset-0 z-30 flex flex-col justify-center pointer-events-none"
       >
-        <div className="max-w-5xl mx-auto text-center px-4 md:px-6 pointer-events-auto">
+        <div className="max-w-xl text-left pl-8 md:pl-16 z-20 pointer-events-auto mt-20 flex flex-col items-start">
           {/* Title */}
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6 leading-tight flex flex-col items-center justify-center select-none drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
-            <span className="text-[#FFFFFF]">
-              Walchand Linux
-            </span>
-            <span className="text-[#A0C4E2]">
+          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-[0.95] drop-shadow-[0_10px_35px_rgba(0,0,0,0.9)]">
+            Walchand Linux <br />
+            <span className="text-[#A0C4E2] bg-gradient-to-r from-white via-[#D4E9F7] to-[#8FAECB] bg-clip-text text-transparent">
               Users' Group
             </span>
           </h1>
 
-          {/* Tagline / Motto - sleek glassmorphic pill badge */}
-          <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#1C3041]/50 border border-white/10 backdrop-blur-md mb-8">
-            <span className="text-xs md:text-sm font-mono tracking-[0.25em] text-[#D4E9F7]">
-              CODE · COLLABORATE · CONTRIBUTE
+          {/* Motto Accent (Left-Aligned below headline) */}
+          <div className="mt-8 mb-8 border-l-2 border-[#A0C4E2] pl-4 py-1">
+            <span className="text-xs sm:text-sm font-mono font-bold tracking-[0.2em] text-[#A0C4E2] opacity-80 uppercase drop-shadow-sm">
+              Code &bull; Collaborate &bull; Contribute
             </span>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/events" className="flex items-center justify-center gap-2 px-6 py-3 md:px-8 md:py-4 bg-[#1C3041] hover:bg-[#A0C4E2] text-[#FFFFFF] hover:text-[#1C3041] rounded-lg font-bold transition-all duration-300 group shadow-[0_0_20px_rgba(28,48,65,0.5)] hover:shadow-[0_0_25px_rgba(160,196,226,0.6)]">
-              Explore Events
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          {/* CTA Row (Left-Aligned below motto) */}
+          <div className="flex flex-wrap items-center gap-5">
+            <Link to="/events" className="group px-7 py-3.5 rounded-full bg-white text-black font-bold tracking-wide hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:scale-105 transition-all duration-300 flex items-center justify-center">
+              Explore Events 
+              <span className="ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
             </Link>
             <button 
-              onClick={() => window.scrollTo({ top: window.innerHeight * 1.5, behavior: 'smooth' })} 
-              className="flex items-center justify-center px-6 py-3 md:px-8 md:py-4 border-2 border-[#1C3041] hover:border-[#A0C4E2] text-[#A0C4E2] hover:text-[#FFFFFF] hover:bg-[#1C3041]/30 rounded-lg font-bold transition-all duration-300 backdrop-blur-sm shadow-lg shadow-black/50"
+              onClick={() => window.scrollTo({ top: window.innerHeight * 1.6, behavior: 'smooth' })}
+              className="group px-7 py-3.5 rounded-full bg-[#0A1118]/60 border border-white/10 text-gray-300 hover:text-white hover:border-white/30 backdrop-blur-md hover:bg-[#1C3041]/60 hover:scale-105 transition-all duration-300 flex items-center justify-center"
             >
-              Discover More
+              Discover More 
+              <span className="ml-2 group-hover:translate-y-1 transition-transform">&darr;</span>
             </button>
           </div>
         </div>
