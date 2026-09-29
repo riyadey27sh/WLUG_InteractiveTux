@@ -35,28 +35,25 @@ const Navbar = () => {
       </Link>
 
       {/* Center/Right: Nav items */}
-      <div className="hidden md:flex items-center gap-2">
+      <div className="hidden md:flex items-center gap-4">
         {links.map((link) => {
           const isActive = location.pathname === link.path;
           return (
             <Link
               key={link.path}
               to={link.path}
-              className={`relative px-5 py-2 text-sm font-mono transition-colors whitespace-nowrap rounded-full ${
-                isActive ? 'text-white' : 'text-gray-400 hover:text-white hover:bg-white/[0.03]'
+              className={`relative px-2 py-2 flex flex-col items-center text-sm font-mono transition-colors whitespace-nowrap ${
+                isActive ? 'text-white' : 'text-white/50 hover:text-white'
               }`}
             >
+              <span className="relative z-10">{link.label}</span>
               {isActive && (
                 <motion.div
-                  layoutId="active-pill"
-                  className="absolute inset-0 bg-white/[0.06] rounded-full border border-white/[0.05]"
+                  layoutId="active-dot"
+                  className="w-1.5 h-1.5 rounded-full bg-[#A0C4E2] shadow-[0_0_8px_#A0C4E2] mx-auto mt-1 absolute -bottom-1"
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
-              <span className="relative z-10 flex items-center gap-2">
-                {isActive && <Terminal className="w-3.5 h-3.5 text-[#A0C4E2]" />}
-                {link.label}
-              </span>
             </Link>
           );
         })}

@@ -182,20 +182,20 @@ const LinuxEasterEgg = ({ children }) => {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-2xl bg-[#0c0c0c] rounded-xl overflow-hidden shadow-2xl shadow-primary/20 border border-primary/30 relative"
+              className="w-full max-w-2xl bg-[#0A1118]/95 rounded-xl overflow-hidden shadow-2xl shadow-[#1C3041]/50 border border-[#1C3041]/80 relative backdrop-blur-xl"
             >
               {/* Scanlines Effect */}
               <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-50 opacity-20 mix-blend-overlay" />
 
               {/* Terminal Header */}
-              <div className="bg-[#1a1a1a] px-4 py-3 flex items-center justify-between border-b border-primary/20">
+              <div className="bg-[#1C3041]/40 px-4 py-3 flex items-center justify-between border-b border-[#1C3041]/80">
                 <div className="flex items-center gap-2">
-                  <TerminalIcon className="w-4 h-4 text-primary" />
-                  <span className="text-xs font-mono text-primary tracking-widest">GUEST_TERMINAL // WLUG</span>
+                  <TerminalIcon className="w-4 h-4 text-[#A0C4E2]" />
+                  <span className="text-xs font-mono text-[#A0C4E2] tracking-widest">GUEST_TERMINAL // WLUG</span>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"
+                  className="w-3 h-3 rounded-full bg-rose-500/80 hover:bg-rose-500 transition-colors"
                 />
               </div>
 
@@ -230,9 +230,9 @@ const LinuxEasterEgg = ({ children }) => {
                   </div>
                 ) : isPlaying ? (
                   <div className="w-full h-full flex flex-col font-mono relative z-10">
-                    <div className="flex justify-between w-full mb-8 text-primary text-sm tracking-widest">
+                    <div className="flex justify-between w-full mb-8 text-[#A0C4E2] text-sm tracking-widest">
                       <span>TRIVIA SCORE: {score} / {TRIVIA_QUESTIONS.length}</span>
-                      <button onClick={closeGame} className="hover:text-white transition-colors">[EXIT]</button>
+                      <button onClick={closeGame} className="hover:text-[#FFFFFF] transition-colors">[EXIT]</button>
                     </div>
 
                     {!gameOver ? (
@@ -242,8 +242,8 @@ const LinuxEasterEgg = ({ children }) => {
                         animate={{ opacity: 1, x: 0 }}
                         className="flex-1 flex flex-col"
                       >
-                        <h3 className="text-xl text-white font-bold mb-8">
-                          <span className="text-primary mr-2">root@wlug:~$</span>
+                        <h3 className="text-xl text-[#FFFFFF] font-bold mb-8">
+                          <span className="text-[#A0C4E2] mr-2">root@wlug:~$</span>
                           {TRIVIA_QUESTIONS[currentQuestion].q}
                         </h3>
                         <div className="space-y-3">
@@ -251,9 +251,9 @@ const LinuxEasterEgg = ({ children }) => {
                             <button
                               key={i}
                               onClick={() => handleAnswer(i)}
-                              className="w-full text-left px-4 py-3 bg-[#121212] border border-primary/20 text-gray-300 hover:text-white hover:bg-primary/20 hover:border-primary transition-all rounded"
+                              className="w-full text-left px-4 py-3 bg-[#1C3041]/20 border border-[#1C3041]/50 text-[#D4E9F7] hover:text-[#FFFFFF] hover:bg-[#1C3041]/40 hover:border-[#A0C4E2]/50 transition-all rounded"
                             >
-                              <span className="text-primary mr-3 font-bold">[{String.fromCharCode(65 + i)}]</span>
+                              <span className="text-[#A0C4E2] mr-3 font-bold">[{String.fromCharCode(65 + i)}]</span>
                               {opt}
                             </button>
                           ))}
@@ -265,11 +265,11 @@ const LinuxEasterEgg = ({ children }) => {
                         animate={{ opacity: 1, scale: 1 }}
                         className="flex-1 flex flex-col items-center justify-center text-center"
                       >
-                        <span className="text-primary font-bold text-3xl mb-4">TEST COMPLETE</span>
-                        <span className="text-white text-xl mb-8">FINAL SCORE: {score} / {TRIVIA_QUESTIONS.length}</span>
+                        <span className="text-[#A0C4E2] font-bold text-3xl mb-4">TEST COMPLETE</span>
+                        <span className="text-[#FFFFFF] text-xl mb-8">FINAL SCORE: {score} / {TRIVIA_QUESTIONS.length}</span>
                         <button
                           onClick={startGame}
-                          className="px-6 py-3 bg-primary/20 text-primary border border-primary hover:bg-primary hover:text-black transition-colors font-bold tracking-widest"
+                          className="px-6 py-3 bg-[#1C3041]/40 text-[#A0C4E2] border border-[#A0C4E2]/50 hover:bg-[#A0C4E2] hover:text-[#0A1118] transition-colors font-bold tracking-widest"
                         >
                           RETRY
                         </button>
@@ -282,19 +282,19 @@ const LinuxEasterEgg = ({ children }) => {
                     onClick={() => inputRef.current?.focus()}
                   >
                     {history.map((line, i) => (
-                      <div key={i} className={`mb-1 ${line.type === 'user' ? 'text-white' : 'text-primary'}`}>
+                      <div key={i} className={`mb-1 ${line.type === 'user' ? 'text-[#FFFFFF]' : 'text-[#A0C4E2]'}`}>
                         {line.content}
                       </div>
                     ))}
 
                     <form onSubmit={handleSubmit} className="flex items-center mt-2">
-                      <span className="text-white mr-2">guest@wlug:~$</span>
+                      <span className="text-[#D4E9F7] mr-2">guest@wlug:~$</span>
                       <input
                         ref={inputRef}
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        className="flex-1 bg-transparent border-none outline-none text-white focus:ring-0"
+                        className="flex-1 bg-transparent border-none outline-none text-[#FFFFFF] focus:ring-0"
                         spellCheck="false"
                         autoComplete="off"
                         autoFocus

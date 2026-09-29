@@ -91,12 +91,13 @@ const TuxScrollSequence = () => {
         }
       });
 
-      // 1. Animate Hero Section out (0% to 15%)
-      tl.to(heroRef.current, {
+      // 1. Animate Hero Section out (0% to 18%)
+      tl.to([heroRef.current, logosRef.current], {
         opacity: 0,
         y: -20,
+        pointerEvents: "none",
         ease: "power2.inOut",
-        duration: 0.15
+        duration: 0.18
       }, 0);
 
       // 2. Animate frame sequence over 15% to 75% of scroll
@@ -167,15 +168,13 @@ const TuxScrollSequence = () => {
           {/* CTA Row (Left-Aligned below motto) */}
           <div className="flex flex-wrap items-center gap-5">
             <Link to="/events" className="group px-7 py-3.5 rounded-full bg-white text-black font-bold tracking-wide hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:scale-105 transition-all duration-300 flex items-center justify-center">
-              Explore Events 
-              <span className="ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
+              Explore Events
             </Link>
             <button 
               onClick={() => window.scrollTo({ top: window.innerHeight * 1.6, behavior: 'smooth' })}
               className="group px-7 py-3.5 rounded-full bg-[#0A1118]/60 border border-white/10 text-gray-300 hover:text-white hover:border-white/30 backdrop-blur-md hover:bg-[#1C3041]/60 hover:scale-105 transition-all duration-300 flex items-center justify-center"
             >
-              Discover More 
-              <span className="ml-2 group-hover:translate-y-1 transition-transform">&darr;</span>
+              Discover More
             </button>
           </div>
         </div>

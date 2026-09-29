@@ -1,53 +1,90 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { SiArchlinux, SiUbuntu, SiDocker, SiGit, SiDebian, SiPython } from 'react-icons/si';
+import React, { useState, useEffect } from 'react';
+import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 
-const distros = [
-  { 
-    id: 'arch', Icon: SiArchlinux, top: '25%', left: '4%', delay: 0,
-    hoverBorder: 'hover:border-[#1793D1]/60', hoverShadow: 'hover:shadow-[0_0_20px_rgba(23,147,209,0.4)]', hoverText: 'group-hover:text-[#1793D1]'
-  },
-  { 
-    id: 'ubuntu', Icon: SiUbuntu, top: '85%', left: '8%', delay: 0.5,
-    hoverBorder: 'hover:border-[#E95420]/60', hoverShadow: 'hover:shadow-[0_0_20px_rgba(233,84,32,0.4)]', hoverText: 'group-hover:text-[#E95420]'
-  },
-  { 
-    id: 'git', Icon: SiGit, top: '22%', left: '85%', delay: 0.2,
-    hoverBorder: 'hover:border-[#F05032]/60', hoverShadow: 'hover:shadow-[0_0_20px_rgba(240,80,50,0.4)]', hoverText: 'group-hover:text-[#F05032]'
-  },
-  { 
-    id: 'docker', Icon: SiDocker, top: '45%', left: '78%', delay: 1.2,
-    hoverBorder: 'hover:border-[#2496ED]/60', hoverShadow: 'hover:shadow-[0_0_20px_rgba(36,150,237,0.4)]', hoverText: 'group-hover:text-[#2496ED]'
-  },
-  { 
-    id: 'debian', Icon: SiDebian, top: '65%', left: '90%', delay: 0.8,
-    hoverBorder: 'hover:border-[#A81D33]/60', hoverShadow: 'hover:shadow-[0_0_20px_rgba(168,29,51,0.4)]', hoverText: 'group-hover:text-[#A81D33]'
-  },
-  { 
-    id: 'python', Icon: SiPython, top: '82%', left: '75%', delay: 1.5,
-    hoverBorder: 'hover:border-[#FFD43B]/60', hoverShadow: 'hover:shadow-[0_0_20px_rgba(255,212,59,0.3)]', hoverText: 'group-hover:text-[#FFD43B]'
-  },
+const organicLogos = [
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ubuntu/ubuntu-original.svg", x: "82%", y: "25%", w: 64, mobX: "82%", mobY: "25%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/debian/debian-original.svg", x: "92%", y: "38%", w: 56, mobX: "92%", mobY: "38%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg", x: "92%", y: "62%", w: 60, mobX: "92%", mobY: "62%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/archlinux/archlinux-original.svg", x: "82%", y: "75%", w: 60, mobX: "82%", mobY: "75%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg", x: "72%", y: "62%", w: 56, mobX: "72%", mobY: "62%" },
+  { src: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg", x: "72%", y: "38%", w: 72, mobX: "72%", mobY: "38%" },
 ];
 
-const SpotlightCard = ({ Icon, top, left, delay, hoverBorder, hoverShadow, hoverText }) => {
-  return (
-    <motion.div
-      className={`absolute group flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-[#1C3041]/25 border border-white/10 backdrop-blur-md transition-all duration-300 hover:scale-110 ${hoverBorder} ${hoverShadow} pointer-events-auto`}
-      style={{ top, left }}
-      animate={{ y: [0, -8, 0] }}
-      transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay }}
-    >
-      <Icon className={`w-7 h-7 text-white/30 transition-colors duration-300 ${hoverText}`} />
-    </motion.div>
-  );
-};
+const DistroSpotlightOrbit = React.forwardRef<HTMLDivElement, any>((props, ref) => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const [hasMouseMoved, setHasMouseMoved] = useState(false);
 
-const DistroSpotlightOrbit = React.forwardRef((props, ref) => {
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+      if (!hasMouseMoved) setHasMouseMoved(true);
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY, hasMouseMoved]);
+
+  const maskImage = useMotionTemplate`radial-gradient(400px circle at ${mouseX}px ${mouseY}px, black 0%, transparent 100%)`;
+
   return (
-    <div ref={ref} className="absolute inset-0 z-10 pointer-events-none">
-      {distros.map((distro) => (
-        <SpotlightCard key={distro.id} {...distro} />
-      ))}
+    <div ref={ref} className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+      {/* Ambient Base Layer (PC) - Always faintly visible */}
+      <div className="absolute inset-0 z-0 pointer-events-none hidden md:block opacity-[0.05]">
+        {organicLogos.map((logo, i) => (
+          <img 
+            key={`ambient-${i}`} 
+            src={logo.src} 
+            alt="Distro" 
+            className="absolute grayscale"
+            style={{ left: logo.x, top: logo.y, width: logo.w, height: 'auto' }} 
+          />
+        ))}
+      </div>
+
+      {/* Organic Flashlight Reveal Layer (PC) */}
+      <motion.div 
+        className="absolute inset-0 z-0 pointer-events-none hidden md:block opacity-80"
+        style={{ WebkitMaskImage: hasMouseMoved ? maskImage : 'none', maskImage: hasMouseMoved ? maskImage : 'none' }}
+      >
+        {organicLogos.map((logo, i) => (
+          <motion.img 
+            key={`reveal-${i}`} 
+            src={logo.src} 
+            alt="Distro" 
+            className="absolute drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+            style={{ left: logo.x, top: logo.y, width: logo.w, height: 'auto' }} 
+            animate={{ y: [0, -10, 0] }}
+            transition={{ repeat: Infinity, duration: 4 + i * 0.5, ease: "easeInOut" }}
+          />
+        ))}
+      </motion.div>
+
+      {/* Mobile Background Fallback */}
+      <div className="absolute inset-0 z-0 pointer-events-none md:hidden overflow-hidden">
+        {organicLogos.map((logo, i) => (
+          <motion.img
+            key={`mob-${i}`}
+            src={logo.src}
+            alt="Distro"
+            className="absolute opacity-[0.25] grayscale"
+            style={{
+              left: logo.mobX,
+              top: logo.mobY,
+              width: logo.w * 0.75,
+            }}
+            animate={{
+              y: [0, 15, 0],
+              rotate: [0, Math.random() * 10 - 5, 0]
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: 5 + i,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 });
