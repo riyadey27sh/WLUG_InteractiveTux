@@ -11,8 +11,8 @@ export default {
         primary: "#0ea5e9",
       },
       fontFamily: {
-        sans: ['Fira Code', 'monospace'],
-        mono: ['Fira Code', 'monospace'],
+        sans: ['"Inter"', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
       }
     },
   },

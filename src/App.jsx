@@ -5,6 +5,8 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Events from './pages/Events';
 import Board from './pages/Board';
+// Admin panel — protect this route in production (e.g. Supabase Auth gate)
+import BoardAdmin from './components/BoardAdmin';
 import ScrollToTop from './components/ScrollToTop';
 import { BootProvider } from './components/boot/BootProvider';
 
@@ -23,6 +25,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/events" element={<Events />} />
               <Route path="/board" element={<Board />} />
+              {/* Board admin panel — wire up auth protection before deploying */}
+              <Route path="/admin/board" element={<BoardAdmin />} />
             </Routes>
           </AnimatePresence>
         </main>

@@ -10,10 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "autoprefixer": "^10.6.1",
+    "browser-image-compression": "^2.0.2",
     "framer-motion": "^13.4.0",
     "gsap": "^3.15.0",
     "lucide-react": "^1.46.0",
+    "papaparse": "^5.7.0",
     "postcss": "^8.5.28",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -22,10 +25,13 @@
     "tailwindcss": "^3.4.19"
   },
   "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "oxlint": "^1.81.0",
+    "typescript": "^7.0.2",
     "vite": "^8.3.0"
   }
 }

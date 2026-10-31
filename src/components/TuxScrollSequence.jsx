@@ -56,10 +56,10 @@ const TuxScrollSequence = () => {
       const canvasWidth = rect.width;
       const canvasHeight = rect.height;
 
-      // Cover scaling
+      // Cover scaling, reduced by 5%
       const hRatio = canvasWidth / img.width;
       const vRatio = canvasHeight / img.height;
-      const ratio = Math.max(hRatio, vRatio);
+      const ratio = Math.max(hRatio, vRatio) * 0.95;
       
       const centerShift_x = (canvasWidth - img.width * ratio) / 2;
       const centerShift_y = (canvasHeight - img.height * ratio) / 2;
